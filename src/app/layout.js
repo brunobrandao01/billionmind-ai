@@ -1,19 +1,12 @@
 export const metadata = {
   title: "BillionMind AI",
-  description: "Seu aplicativo de alta performance e inteligência artificial",
+  description: "Alta performance, disciplina e liberdade em um único chat.",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="pt-BR">
-      <body
-        style={{
-          margin: 0,
-          background: "#000",
-          color: "#fff",
-          fontFamily: "system-ui, sans-serif",
-        }}
-      >
+      <body>
         {children}
       </body>
     </html>
