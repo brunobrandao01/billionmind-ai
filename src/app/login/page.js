@@ -1,153 +1,319 @@
 "use client";
-import { useState } from "react";
-import { createClient } from "@supabase/supabase-js";
-import { useRouter } from "next/navigation";
 
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@supabase/supabase-js";
+
+// Supabase (substitua pelos seus valores reais)
 const supabase = createClient(
-  "https://lppjltjoxczooxsbtlyr.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwcGpsdGpveGN6b294c2J0bHlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUwNDY4MTUsImV4cCI6MjA4MDYyMjgxNX0.AK0i5gbTk12z6dgIrNYkFoi6LQMFocSxbi9lka-GZrc"
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
 export default function LoginPage() {
   const router = useRouter();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [erro, setErro] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  async function login() {
-    setErro("");
-    const { data, error } = await supabase.auth.signInWithPassword({
+  // Animação de entrada
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
     if (error) {
-      setErro("Credenciais incorretas.");
-      return;
+      setError(error.message);
+      setLoading(false);
+    } else {
+      router.push("/dashboard");
     }
-
-    router.push("/dashboard");
-  }
+  };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background:
-          "linear-gradient(135deg, #4b0082, #8a2be2, #6a0dad, #9b30ff)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "20px",
-      }}
-    >
+    <>
+      <style jsx global>{`
+        body {
+          background: #000;
+          margin: 0;
+          padding: 0;
+          min-height: 100vh;
+          font-family: "Inter", system-ui, sans-serif;
+        }
+        .bg-particles {
+          position: fixed;
+          inset: 0;
+          background: radial-gradient(circle at 20% 80%, rgba(244, 200, 108, 0.08), transparent 50%),
+                      radial-gradient(circle at 80% 20%, rgba(244, 200, 108, 0.06), transparent 50%),
+                      #000;
+          z-index: 1;
+        }
+        .glow-center {
+          position: fixed;
+          width: 800px;
+          height: 800px;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(244, 200, 108, 0.18), transparent 70%);
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          pointer-events: none;
+          animation: pulse 12s infinite ease-in-out;
+          z-index: 2;
+        }
+        @keyframes pulse {
+          0%, 100% { opacity: 0.4; transform: translate(-50%, -50%) scale(1); }
+          50% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.4); }
+        }
+      `}</style>
+
+      <div className="bg-particles" />
+      <div className="glow-center" />
+
       <div
         style={{
-          width: "100%",
-          maxWidth: "380px",
-          background: "rgba(255,255,255,0.06)",
-          borderRadius: "22px",
-          padding: "32px",
-          backdropFilter: "blur(14px)",
-          border: "1px solid rgba(255,255,255,0.15)",
-          boxShadow: "0 0 40px rgba(0,0,0,0.35)",
-          textAlign: "center",
+          position: "fixed",
+          inset: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 10,
+          padding: "20px",
         }}
       >
-        {/* Avatar */}
-        <img
-          src="https://i.imgur.com/7yUVE3E.png"
-          alt="avatar"
+        <div
           style={{
-            width: "82px",
-            height: "82px",
-            borderRadius: "50%",
-            margin: "0 auto 15px auto",
-            border: "2px solid rgba(255,255,255,0.2)",
-          }}
-        />
-
-        <h1 style={{ color: "#fff", fontSize: "1.6rem", marginBottom: "20px" }}>
-          Entrar no BillionMind
-        </h1>
-
-        {erro && (
-          <p style={{ color: "#ff6b6b", marginBottom: "10px" }}>{erro}</p>
-        )}
-
-        {/* Input Email */}
-        <input
-          type="email"
-          placeholder="Seu e-mail"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          style={{
+            background: "rgba(15, 15, 30, 0.55)",
+            backdropFilter: "blur(20px)",
+            border: "1px solid rgba(244, 200, 108, 0.3)",
+            borderRadius: "28px",
+            padding: "48px 40px",
             width: "100%",
-            padding: "14px",
-            borderRadius: "10px",
-            border: "none",
-            marginBottom: "14px",
-            background: "rgba(255,255,255,0.12)",
-            color: "#fff",
-            fontSize: "1rem",
-            outline: "none",
-          }}
-        />
-
-        {/* Input Senha */}
-        <input
-          type="password"
-          placeholder="Sua senha"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          style={{
-            width: "100%",
-            padding: "14px",
-            borderRadius: "10px",
-            border: "none",
-            marginBottom: "14px",
-            background: "rgba(255,255,255,0.12)",
-            color: "#fff",
-            fontSize: "1rem",
-            outline: "none",
-          }}
-        />
-
-        {/* Botão de Login */}
-        <button
-          onClick={login}
-          style={{
-            width: "100%",
-            padding: "14px",
-            borderRadius: "999px",
-            background:
-              "linear-gradient(135deg, #ffdd55, #ffbb00, #ffcc33, #ffe680)",
-            border: "none",
-            color: "#000",
-            fontWeight: "bold",
-            fontSize: "1.1rem",
-            cursor: "pointer",
-            marginTop: "5px",
-            boxShadow: "0 0 12px rgba(255,255,255,0.4)",
+            maxWidth: "460px",
+            boxShadow: "0 25px 60px rgba(0,0,0,0.8), 0 0 80px rgba(244,200,108,0.2)",
+            animation: "fadeIn 1.2s ease-out forwards",
+            opacity: 0,
           }}
         >
-          Entrar
-        </button>
+          {/* Título */}
+          <h1
+            style={{
+              fontFamily: "'Orbitron', sans-serif",
+              fontSize: "3.2rem",
+              fontWeight: 900,
+              textAlign: "center",
+              background: "linear-gradient(90deg, #fff, #f4c86c, #fff)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              marginBottom: "8px",
+            }}
+          >
+            BillionMind AI
+          </h1>
+          <p
+            style={{
+              textAlign: "center",
+              color: "#c2c3d6",
+              fontSize: "1.1rem",
+              marginBottom: "40px",
+            }}
+          >
+            Acesse sua conta e entre no sistema
+          </p>
 
-        {/* Link Criar Conta */}
-        <p
-          onClick={() => router.push("/signup")}
-          style={{
-            marginTop: "18px",
-            color: "#ffdd55",
-            cursor: "pointer",
-            fontSize: "0.95rem",
-          }}
-        >
-          Criar uma conta
-        </p>
+          {/* Erro */}
+          {error && (
+            <div
+              style={{
+                background: "rgba(255,51,102,0.15)",
+                border: "1px solid #ff3366",
+                color: "#ff6b6b",
+                padding: "12px 16px",
+                borderRadius: "12px",
+                textAlign: "center",
+                marginBottom: "20px",
+                fontSize: "0.95rem",
+              }}
+            >
+              {error}
+            </div>
+          )}
+
+          {/* Formulário */}
+          <form onSubmit={handleLogin}>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              style={{
+                width: "100%",
+                padding: "16px 20px",
+                marginBottom: "16px",
+                background: "rgba(30,30,50,0.6)",
+                border: "1px solid rgba(244,200,108,0.3)",
+                borderRadius: "14px",
+                color: "#fff",
+                fontSize: "1rem",
+                outline: "none",
+                transition: "all 0.3s",
+              }}
+              onFocus={(e) => (e.target.style.borderColor = "#f4c86c")}
+              onBlur={(e) => (e.target.style.borderColor = "rgba(244,200,108,0.3)")}
+            />
+            <input
+              type="password"
+              placeholder="Senha"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={{
+                width: "100%",
+                padding: "16px 20px",
+                marginBottom: "24px",
+                background: "rgba(30,30,50,0.6)",
+                border: "1px solid rgba(244,200,108,0.3)",
+                borderRadius: "14px",
+                color: "#fff",
+                fontSize: "1rem",
+                outline: "none",
+                transition: "all 0.3s",
+              }}
+              onFocus={(e) => (e.target.style.borderColor = "#f4c86c")}
+              onBlur={(e) => (e.target.style.borderColor = "rgba(244,200,108,0.3)")}
+            />
+
+            <button
+              type="submit"
+              disabled={loading}
+              style={{
+                width: "100%",
+                padding: "18px",
+                background: loading
+                  ? "rgba(244,200,108,0.6)"
+                  : "linear-gradient(90deg, #f4c86c, #ffd700)",
+                color: "#000",
+                fontSize: "1.3rem",
+                fontWeight: 800,
+                fontFamily: "'Orbitron', sans-serif",
+                border: "none",
+                borderRadius: "16px",
+                cursor: loading ? "not-allowed" : "pointer",
+                boxShadow: "0 12px 30px rgba(244,200,108,0.5)",
+                transition: "all 0.3s",
+              }}
+            >
+              {loading ? "Entrando..." : "Entrar"}
+            </button>
+          </form>
+
+          <p
+            style={{
+              textAlign: "center",
+              marginTop: "24px",
+              color: "#aaa",
+              fontSize: "0.95rem",
+            }}
+          >
+            Não tem conta?{" "}
+            <a
+              href="/register"
+              style={{
+                color: "#f4c86c",
+                fontWeight: 600,
+                textDecoration: "underline",
+              }}
+            >
+              Criar Conta
+            </a>
+          </p>
+
+          {/* Bloco de Assinaturas */}
+          <div
+            style={{
+              marginTop: "48px",
+              paddingTop: "32px",
+              borderTop: "1px dashed rgba(244,200,108,0.3)",
+              textAlign: "center",
+            }}
+          >
+            <p
+              style={{
+                color: "#f4c86c",
+                fontSize: "1.1rem",
+                fontWeight: 600,
+                marginBottom: "20px",
+              }}
+            >
+              Desbloqueie todo o poder da BillionMind AI
+            </p>
+
+            <a
+              href="https://buy.stripe.com/14AcN5buodjRewI8cQcAo01"
+              target="_blank"
+              style={{
+                display: "block",
+                marginBottom: "16px",
+                padding: "16px",
+                background: "linear-gradient(90deg, #f4c86c, #ffd700)",
+                color: "#000",
+                fontWeight: 800,
+                fontSize: "1.15rem",
+                borderRadius: "14px",
+                textDecoration: "none",
+                boxShadow: "0 10px 30px rgba(244,200,108,0.4)",
+              }}
+            >
+              Plano PRO
+            </a>
+
+            <a
+              href="https://buy.stripe.com/cNiaEX1TOfrZ2O08cQcAo02"
+              target="_blank"
+              style={{
+                display: "block",
+                padding: "16px",
+                background: "linear-gradient(90deg, #b8860b, #f4c86c)",
+                color: "#fff",
+                fontWeight: 800,
+                fontSize: "1.15rem",
+                borderRadius: "14px",
+                textDecoration: "none",
+                boxShadow: "0 12px 40px rgba(244,200,108,0.6)",
+              }}
+            >
+              Plano PREMIUM (Recomendado)
+            </a>
+          </div>
+        </div>
       </div>
-    </div>
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(40px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
+    </>
   );
 }
