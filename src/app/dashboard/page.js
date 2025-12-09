@@ -1,293 +1,180 @@
+// src/app/dashboard/page.tsx
 "use client";
 
-import { useState, useEffect } from "react";
-import { createClient } from "@supabase/supabase-js";
+import Link from "next/link";
+import { useState } from "react";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
-
-export default function Dashboard() {
-  const [user, setUser] = useState(null);
-  const [plan, setPlan] = useState("free");
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
-
-  // Carrega usuário automaticamente
-  useEffect(() => {
-    async function load() {
-      const { data } = await supabase.auth.getUser();
-      if (!data.user) {
-        window.location.href = "/login";
-        return;
-      }
-      setUser(data.user);
-      loadPlan(data.user.id);
-    }
-    load();
-  }, []);
-
-  // Carrega plano do usuário
-  async function loadPlan(userId) {
-    const { data } = await supabase
-      .from("profiles")
-      .select("plan")
-      .eq("id", userId)
-      .single();
-
-    if (data?.plan) setPlan(data.plan);
-  }
-
-  // Envia mensagem ao endpoint /api/chat
-  async function sendMessage() {
-    if (!input.trim()) return;
-
-    setMessages((prev) => [...prev, { from: "user", text: input }]);
-    const userMessage = input;
-    setInput("");
-
-    const response = await fetch("/api/chat", {
-      method: "POST",
-      body: JSON.stringify({ message: userMessage }),
-    });
-
-    const data = await response.json();
-
-    setMessages((prev) => [
-      ...prev,
-      { from: "ai", text: data.reply || "Erro ao processar resposta." },
-    ]);
-  }
-
-  async function logout() {
-    await supabase.auth.signOut();
-    window.location.href = "/login";
-  }
+export default function DashboardPage() {
+  const userName = "Alexandre"; // Simulação — futuramente virá do Supabase
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background:
-          "radial-gradient(circle at top, #1b1b1f 0%, #0b0b0d 60%, #000 100%)",
-        paddingBottom: "50px",
-      }}
-    >
-      {/* HEADER */}
-      <header
-        style={{
-          padding: "20px 30px",
-          borderBottom: "1px solid rgba(255,255,255,0.1)",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          background: "rgba(0,0,0,0.6)",
-          backdropFilter: "blur(10px)",
-        }}
-      >
-        <h1 style={{ color: "#f4c86c", letterSpacing: "2px" }}>
-          BillionMind AI
-        </h1>
-
-        <div
-          style={{
-            padding: "6px 16px",
-            borderRadius: "30px",
-            border: "1px solid rgba(244,200,108,0.25)",
-            background: "rgba(255,255,255,0.05)",
-            color: "#f4c86c",
-            fontWeight: "bold",
-          }}
-        >
-          Plano: {plan.toUpperCase()}
-        </div>
-      </header>
-
-      {/* CONTAINER */}
-      <div
-        style={{
-          maxWidth: "1100px",
-          margin: "0 auto",
-          padding: "30px 20px",
-        }}
-      >
-        {/* CHAT FREE */}
-        <div
-          style={{
-            background: "rgba(255,255,255,0.05)",
-            border: "1px solid rgba(255,255,255,0.08)",
-            borderRadius: "16px",
-            padding: "20px",
-            backdropFilter: "blur(8px)",
-            marginBottom: "30px",
-          }}
-        >
-          <h2
-            style={{
-              color: "#f4c86c",
-              marginBottom: "14px",
-              letterSpacing: "1px",
-            }}
-          >
-            Chat Inteligente
-          </h2>
-
+    <>
+      <div className="min-h-screen bg-black text-white overflow-hidden relative">
+        {/* Fundo futurista com textura suave */}
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute inset-0 bg-gradient-to-br from-yellow-900/10 via-black to-black" />
           <div
+            className="absolute inset-0"
             style={{
-              height: "280px",
-              overflowY: "auto",
-              padding: "10px",
-              background: "rgba(0,0,0,0.4)",
-              borderRadius: "12px",
-              border: "1px solid rgba(255,255,255,0.1)",
-              marginBottom: "12px",
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23F4C86C' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
             }}
-          >
-            {messages.map((m, i) => (
+          />
+        </div>
+
+        {/* Partículas douradas flutuantes */}
+        <div className="absolute inset-0 pointer-events-none">
+          {[...Array(10)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-yellow-500 rounded-full opacity-50 animate-float"
+              style={{
+                left: `${5 + i * 10}%`,
+                top: `${10 + i * 7}%`,
+                animationDelay: `${i * 0.7}s`,
+                animationDuration: `${20 + i * 5}s`,
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Navigation Bar Premium */}
+        <nav className="relative z-20 backdrop-blur-2xl bg-white/5 border-b border-yellow-600/20">
+          <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+            <div className="flex items-center space-x-10">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
+                BillionMind AI
+              </h1>
+              <div className="hidden md:flex items-center space-x-8">
+                {[
+                  { name: "Dashboard", active: true },
+                  { name: "Chat IA", href: "/dashboard/chat" },
+                  { name: "Jornadas", href: "/dashboard/journeys" },
+                  { name: "Planos", href: "/plans" },
+                  { name: "Perfil", href: "/dashboard/profile" },
+                ].map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href || "#"}
+                    className={`text-lg font-medium transition-all duration-300 ${
+                      item.active
+                        ? "text-yellow-400 border-b-2 border-yellow-400 pb-1"
+                        : "text-gray-300 hover:text-yellow-400"
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+            <div className="text-sm text-gray-400">Olá, {userName}</div>
+          </div>
+        </nav>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-6 py-12 space-y-16">
+
+          {/* Painel de Boas-vindas */}
+          <div className="backdrop-blur-2xl bg-white/8 border border-yellow-600/30 rounded-3xl p-10 text-center animate-fadeIn">
+            <h2 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
+              Bem-vindo à sua evolução, {userName}!
+            </h2>
+            <p className="mt-6 text-xl text-gray-300 max-w-2xl mx-auto">
+              Sua mente, disciplina e lifestyle começam aqui.
+            </p>
+            <Link
+              href="/dashboard/chat"
+              className="inline-block mt-10 px-10 py-5 bg-gradient-to-r from-yellow-500 to-yellow-600 text-black font-bold text-xl rounded-xl hover:from-yellow-400 hover:to-yellow-700 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-yellow-500/50"
+            >
+              Abrir Chat IA
+            </Link>
+          </div>
+
+          {/* Quick Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { label: "Dias de Disciplina", value: "12", color: "from-green-500 to-emerald-600" },
+              { label: "Jornadas Ativas", value: "3", color: "from-blue-500 to-cyan-600" },
+              { label: "Planos Criados", value: "7", color: "from-purple-500 to-pink-600" },
+            ].map((stat, i) => (
               <div
                 key={i}
-                style={{
-                  textAlign: m.from === "user" ? "right" : "left",
-                  marginBottom: "10px",
-                  color: m.from === "user" ? "#f4c86c" : "#fff",
-                }}
+                className="backdrop-blur-2xl bg-white/6 border border-yellow-600/20 rounded-2xl p-8 text-center hover:border-yellow-500/60 transition-all duration-500 hover:shadow-xl hover:shadow-yellow-500/10 animate-fadeIn"
+                style={{ animationDelay: `${i * 0.2}s` }}
               >
-                {m.from === "user" ? "Você: " : "AI: "}
-                {m.text}
+                <div className={`text-5xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}>
+                  {stat.value}
+                </div>
+                <p className="mt-3 text-gray-300 text-lg">{stat.label}</p>
               </div>
             ))}
           </div>
 
-          <div style={{ display: "flex", gap: "10px" }}>
-            <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Digite sua mensagem..."
-              style={{
-                flex: 1,
-                padding: "12px",
-                background: "rgba(255,255,255,0.08)",
-                border: "none",
-                borderRadius: "10px",
-                color: "white",
-              }}
-            />
-            <button
-              onClick={sendMessage}
-              style={{
-                padding: "12px 20px",
-                background: "linear-gradient(135deg, #f4c86c, #d9a84f)",
-                border: "none",
-                borderRadius: "10px",
-                cursor: "pointer",
-                fontWeight: "bold",
-              }}
+          {/* Suas Jornadas */}
+          <div>
+            <div className="flex justify-between items-center mb-8">
+              <h3 className="text-3xl font-bold text-yellow-400">Suas jornadas</h3>
+              <Link
+                href="/dashboard/journeys"
+                className="text-yellow-400 hover:text-yellow-300 font-medium transition"
+              >
+                Ver todas →
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                { title: "30 dias de disciplina absoluta", progress: 68 },
+                { title: "Rotina e renda", progress: 42 },
+                { title: "Lifestyle de luxo", progress: 15 },
+              ].map((journey, i) => (
+                <div
+                  key={i}
+                  className="backdrop-blur-2xl bg-white/5 border border-yellow-600/20 rounded-2xl p-6 hover:border-yellow-500/70 transition-all duration-500 hover:shadow-xl hover:shadow-yellow-500/10"
+                >
+                  <h4 className="text-xl font-semibold text-white mb-3">{journey.title}</h4>
+                  <div className="w-full bg-white/10 rounded-full h-3">
+                    <div
+                      className="bg-gradient-to-r from-yellow-500 to-yellow-600 h-3 rounded-full transition-all duration-1000"
+                      style={{ width: `${journey.progress}%` }}
+                    />
+                  </div>
+                  <p className="mt-3 text-sm text-gray-400">{journey.progress}% concluído</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Preview Chat IA */}
+          <div className="backdrop-blur-2xl bg-white/6 border border-yellow-600/30 rounded-3xl p-10 text-center">
+            <h3 className="text-4xl font-bold text-yellow-400 mb-6">Chat de Alta Performance</h3>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-10">
+              Fale com a IA que organiza sua rotina, disciplina, finanças e lifestyle. Tudo em um só lugar.
+            </p>
+            <Link
+              href="/dashboard/chat"
+              className="inline-block px-12 py-6 bg-gradient-to-r from-yellow-500 to-yellow-600 text-black font-bold text-xl rounded-xl hover:from-yellow-400 hover:to-yellow-700 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-yellow-500/60"
             >
-              Enviar
-            </button>
+              Abrir Chat
+            </Link>
           </div>
         </div>
-
-        {/* ÁREA PRO / PREMIUM */}
-        <div
-          style={{
-            background: "rgba(255,255,255,0.05)",
-            border: "1px solid rgba(255,255,255,0.08)",
-            borderRadius: "16px",
-            padding: "20px",
-            backdropFilter: "blur(8px)",
-            marginBottom: "20px",
-            opacity: plan === "free" ? 0.4 : 1,
-            position: "relative",
-          }}
-        >
-          <h2
-            style={{
-              color: "#f4c86c",
-              marginBottom: "14px",
-            }}
-          >
-            Ferramentas Avançadas
-          </h2>
-
-          <p>Criação automática, estratégias, análises premium e muito mais.</p>
-
-          {plan === "free" && (
-            <div
-              style={{
-                position: "absolute",
-                top: "40%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                background: "rgba(0,0,0,0.7)",
-                padding: "10px 18px",
-                borderRadius: "12px",
-                border: "1px solid rgba(244,200,108,0.3)",
-                color: "#f4c86c",
-                fontWeight: "bold",
-              }}
-            >
-              Disponível apenas para PRO / PREMIUM
-            </div>
-          )}
-        </div>
-
-        {/* UPGRADE BUTTONS */}
-        {plan === "free" && (
-          <>
-            <button
-              onClick={() =>
-                (window.location.href =
-                  "https://buy.stripe.com/14AcN5buodjRewI8cQcAo01")
-              }
-              style={{
-                width: "100%",
-                padding: "14px",
-                marginBottom: "12px",
-                borderRadius: "999px",
-                border: "none",
-                background: "#f4c86c",
-                fontWeight: "bold",
-                cursor: "pointer",
-              }}
-            >
-              🔓 Desbloquear Plano PRO – R$ 29,98/mês
-            </button>
-
-            <button
-              onClick={() =>
-                (window.location.href =
-                  "https://buy.stripe.com/cNiaEX1TOfrZ2O08cQcAo02")
-              }
-              style={{
-                width: "100%",
-                padding: "14px",
-                borderRadius: "999px",
-                border: "none",
-                background: "#e6b85c",
-                fontWeight: "bold",
-                cursor: "pointer",
-              }}
-            >
-              🚀 Desbloquear Plano PREMIUM – R$ 39,90/mês
-            </button>
-          </>
-        )}
-
-        {/* LOGOUT */}
-        <p
-          onClick={logout}
-          style={{
-            marginTop: "20px",
-            textAlign: "center",
-            cursor: "pointer",
-            color: "#aaa",
-          }}
-        >
-          Sair da conta
-        </p>
       </div>
-    </div>
+
+      {/* Animações */}
+      <style jsx>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          50% { transform: translateY(-30px) rotate(6deg); }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 1s ease-out forwards;
+        }
+        .animate-float {
+          animation: float linear infinite;
+        }
+      `}</style>
+    </>
   );
 }
