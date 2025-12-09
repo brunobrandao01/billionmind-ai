@@ -1,68 +1,36 @@
 export default function Home() {
   return (
-    <main
-      style={{
-        minHeight: "100vh",
-        background: "radial-gradient(circle at top, #0a0a0f, #000)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "20px",
-      }}
-    >
-      <div
-        style={{
-          width: "360px",
-          background: "rgba(255,255,255,0.04)",
-          padding: "30px",
-          borderRadius: "16px",
-          boxShadow: "0 0 40px rgba(0,0,0,0.6)",
-          backdropFilter: "blur(10px)",
-          border: "1px solid rgba(255,255,255,0.08)",
-          textAlign: "center",
-        }}
-      >
-        <h1 style={{ color: "#f4c86c", marginBottom: "20px" }}>
-          BillionMind AI
-        </h1>
+    <main style={{ padding: "40px 20px", maxWidth: "900px", margin: "0 auto" }}>
+      
+      <h1 style={{ fontSize: "38px", fontWeight: "700" }}>
+        Transforme sua mente em uma <span className="gold">BillionMind</span>:
+        disciplina, luxo e liberdade em um único chat.
+      </h1>
 
-        <p style={{ fontSize: "0.95rem", color: "#ccc", marginBottom: "20px" }}>
-          Entre para acessar a inteligência artificial, ferramentas exclusivas e
-          área premium.
-        </p>
+      <p style={{ marginTop: 20, color: "var(--text-soft)", fontSize: 18 }}>
+        BillionMind AI é um assistente de alta performance criado para qualquer pessoa 
+        que quer organizar rotina, riqueza, hábitos e mentalidade em uma experiência 
+        simples de chat, direto no navegador.
+      </p>
 
-        <a
-          href="/login"
-          style={{
-            display: "block",
-            padding: "12px",
-            borderRadius: "10px",
-            background: "linear-gradient(120deg, #f4c86c, #e1a93f)",
-            color: "#000",
-            fontWeight: "bold",
-            textDecoration: "none",
-            marginBottom: "12px",
-          }}
-        >
-          Fazer Login
+      <div style={{ marginTop: 30 }}>
+        <a href="/signup" className="btn-primary glow">
+          Criar minha conta PRO
         </a>
 
-        <a
-          href="/signup"
-          style={{
-            display: "block",
-            padding: "12px",
-            borderRadius: "10px",
-            background: "rgba(255,255,255,0.1)",
-            color: "#fff",
-            fontWeight: "bold",
-            textDecoration: "none",
-            border: "1px solid rgba(255,255,255,0.2)",
-          }}
-        >
-          Criar Conta
+        <a href="/como-funciona" className="btn-outline" style={{ marginTop: 14, display: "block" }}>
+          Ver como funciona
         </a>
       </div>
+
+      <section className="card" style={{ marginTop: 60 }}>
+        <h2>Seu chat de alta performance</h2>
+        <p style={{ color: "var(--text-soft)" }}>
+          Rotinas diárias prontas para executar · Mensagens motivacionais · 
+          Geração de imagens lifestyle via IA.
+        </p>
+      </section>
+
     </main>
   );
 }
