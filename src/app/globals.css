@@ -1,74 +1,203 @@
-:root {
-  --bg-main: #05060a;
-  --bg-card: #0c0d16;
-  --bg-soft: #101121;
+/* RESET GLOBAL ------------------------------------------------------------------ */
 
-  --gold: #f4c86c;
-  --gold-soft: rgba(244, 200, 108, 0.18);
-
-  --white: #ffffff;
-  --text-soft: #c2c3d6;
-
-  --radius-lg: 18px;
-  --radius-xl: 26px;
-
-  --shadow-soft: 0 20px 44px rgba(0, 0, 0, 0.85);
-}
-
-/* Fonte */
-body {
+* {
   margin: 0;
   padding: 0;
-  font-family: system-ui, sans-serif;
-  background: var(--bg-main);
-  color: var(--white);
+  box-sizing: border-box;
 }
 
-/* Cards padrão */
-.card {
-  background: var(--bg-card);
-  border-radius: var(--radius-xl);
-  padding: 26px;
-  box-shadow: var(--shadow-soft);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+  background-color: #0b0b0d;
+  color: white;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  scroll-behavior: smooth;
 }
 
-/* Títulos */
-h1, h2, h3 {
+/* TIPOGRAFIA PADRÃO -------------------------------------------------------------- */
+
+h1, h2, h3, h4 {
   font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
-/* Texto dourado estilo premium */
-.gold {
-  color: var(--gold);
+p {
+  line-height: 1.6;
 }
 
-/* Botão amarelo */
-.btn-primary {
-  display: inline-block;
-  width: 100%;
-  padding: 14px 18px;
-  border-radius: var(--radius-lg);
-  background: linear-gradient(90deg, #f4c86c, #f6d78c);
-  color: #000;
+/* LINKS -------------------------------------------------------------- */
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* FUNDO PRINCIPAL -------------------------------------------------------------- */
+
+body {
+  background: radial-gradient(circle at top, #1b1b1f 0%, #0b0b0d 60%, #000 100%);
+}
+
+/* BOTÕES PREMIUM -------------------------------------------------------------- */
+
+button,
+.btn-default {
+  background: linear-gradient(135deg, #f4c86c, #d9a84f);
+  color: black;
   font-weight: 600;
-  text-align: center;
+  padding: 12px 26px;
+  border-radius: 999px;
   border: none;
   cursor: pointer;
+  transition: 0.25s ease;
+  box-shadow: 0 4px 16px rgba(244, 200, 108, 0.25);
 }
 
-/* Botão transparente */
+button:hover,
+.btn-default:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(244, 200, 108, 0.35);
+}
+
+/* BOTÃO CONTORNADO */
+
 .btn-outline {
-  padding: 14px 18px;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--gold);
+  border: 1px solid #f4c86c;
+  color: #f4c86c;
   background: transparent;
-  color: var(--gold);
-  font-weight: 600;
-  text-align: center;
 }
 
-/* Glow dourado */
-.glow {
-  box-shadow: 0 0 18px rgba(244, 200, 108, 0.5);
+.btn-outline:hover {
+  background: rgba(244, 200, 108, 0.08);
+}
+
+/* SEÇÕES GERAIS ------------------------------------------------------------------ */
+
+section {
+  width: 100%;
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+
+.max-w {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* NAVBAR LUXUOSA ----------------------------------------------------------------- */
+
+header {
+  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.45);
+  border-bottom: 1px solid rgba(244, 200, 108, 0.1);
+}
+
+nav a {
+  color: #b9b9c2;
+  font-size: 0.9rem;
+  transition: 0.2s;
+}
+
+nav a:hover {
+  color: white;
+}
+
+/* CARDS PREMIUM ------------------------------------------------------------------ */
+
+.card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 26px;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  transition: 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.55);
+}
+
+/* LISTAS ------------------------------------------------------------------------- */
+
+ul li {
+  list-style: none;
+  position: relative;
+  padding-left: 18px;
+}
+
+ul li::before {
+  content: "•";
+  color: #f4c86c;
+  position: absolute;
+  left: 0;
+}
+
+/* TÍTULOS ESPECIAIS -------------------------------------------------------------- */
+
+.title-section {
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+/* PLANOS ------------------------------------------------------------------------- */
+
+.plan-card {
+  background: #101016;
+  border-radius: 16px;
+  padding: 32px;
+  border: 1px solid rgba(244, 200, 108, 0.12);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.45);
+  transition: 0.25s ease;
+}
+
+.plan-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.55);
+}
+
+.plan-price {
+  font-size: 2.6rem;
+  font-weight: 800;
+}
+
+/* JORNADAS ------------------------------------------------------------------------ */
+
+.jornada-card {
+  background: #0f0f14;
+  padding: 28px;
+  border-radius: 14px;
+  border: 1px solid #1f1f24;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+}
+
+/* ANIMAÇÕES SUAVES ---------------------------------------------------------------- */
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.8s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* RESPONSIVIDADE ------------------------------------------------------------------ */
+
+@media (max-width: 768px) {
+  .title-section {
+    font-size: 1.9rem;
+  }
+
+  nav {
+    display: none;
+  }
+
+  header {
+    padding: 16px;
+  }
 }
