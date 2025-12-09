@@ -1,89 +1,82 @@
 "use client";
-
 import { useState } from "react";
 import { createClient } from "@supabase/supabase-js";
+import { useRouter } from "next/navigation";
 
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  "https://lppjltjoxczooxsbtlyr.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwcGpsdGpveGN6b294c2J0bHlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUwNDY4MTUsImV4cCI6MjA4MDYyMjgxNX0.AK0i5gbTk12z6dgIrNYkFoi6LQMFocSxbi9lka-GZrc"
 );
 
-export default function Login() {
+export default function LoginPage() {
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [erro, setErro] = useState("");
 
-  async function handleLogin() {
-    setErrorMsg("");
-
-    if (!email || !password) {
-      setErrorMsg("Preencha todos os campos.");
-      return;
-    }
-
+  async function login() {
+    setErro("");
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
     if (error) {
-      setErrorMsg(error.message);
+      setErro("Credenciais incorretas.");
       return;
     }
 
-    window.location.href = "/dashboard";
+    router.push("/dashboard");
   }
 
   return (
     <div
       style={{
         minHeight: "100vh",
-        padding: "40px 20px",
+        background:
+          "linear-gradient(135deg, #4b0082, #8a2be2, #6a0dad, #9b30ff)",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background:
-          "radial-gradient(circle at top, #1b1b1f 0%, #0b0b0d 60%, #000 100%)",
+        padding: "20px",
       }}
     >
       <div
-        className="fade-in"
         style={{
           width: "100%",
-          maxWidth: "420px",
+          maxWidth: "380px",
+          background: "rgba(255,255,255,0.06)",
+          borderRadius: "22px",
           padding: "32px",
-          borderRadius: "18px",
-          border: "1px solid rgba(255,255,255,0.08)",
-          background: "rgba(255,255,255,0.05)",
-          backdropFilter: "blur(10px)",
-          boxShadow: "0 0 30px rgba(0,0,0,0.6)",
+          backdropFilter: "blur(14px)",
+          border: "1px solid rgba(255,255,255,0.15)",
+          boxShadow: "0 0 40px rgba(0,0,0,0.35)",
+          textAlign: "center",
         }}
       >
-        <h1
+        {/* Avatar */}
+        <img
+          src="https://i.imgur.com/7yUVE3E.png"
+          alt="avatar"
           style={{
-            textAlign: "center",
-            color: "#f4c86c",
-            fontSize: "1.8rem",
-            marginBottom: "20px",
+            width: "82px",
+            height: "82px",
+            borderRadius: "50%",
+            margin: "0 auto 15px auto",
+            border: "2px solid rgba(255,255,255,0.2)",
           }}
-        >
-          Entrar na BillionMind
+        />
+
+        <h1 style={{ color: "#fff", fontSize: "1.6rem", marginBottom: "20px" }}>
+          Entrar no BillionMind
         </h1>
 
-        {/* ERROR */}
-        {errorMsg && (
-          <p
-            style={{
-              color: "#ff6b6b",
-              textAlign: "center",
-              marginBottom: "12px",
-            }}
-          >
-            {errorMsg}
-          </p>
+        {erro && (
+          <p style={{ color: "#ff6b6b", marginBottom: "10px" }}>{erro}</p>
         )}
 
-        {/* INPUT EMAIL */}
+        {/* Input Email */}
         <input
           type="email"
           placeholder="Seu e-mail"
@@ -93,15 +86,16 @@ export default function Login() {
             width: "100%",
             padding: "14px",
             borderRadius: "10px",
-            marginBottom: "12px",
-            background: "rgba(255,255,255,0.08)",
             border: "none",
-            color: "white",
+            marginBottom: "14px",
+            background: "rgba(255,255,255,0.12)",
+            color: "#fff",
             fontSize: "1rem",
+            outline: "none",
           }}
         />
 
-        {/* INPUT SENHA */}
+        {/* Input Senha */}
         <input
           type="password"
           placeholder="Sua senha"
@@ -111,44 +105,47 @@ export default function Login() {
             width: "100%",
             padding: "14px",
             borderRadius: "10px",
-            marginBottom: "18px",
-            background: "rgba(255,255,255,0.08)",
             border: "none",
-            color: "white",
+            marginBottom: "14px",
+            background: "rgba(255,255,255,0.12)",
+            color: "#fff",
             fontSize: "1rem",
+            outline: "none",
           }}
         />
 
-        {/* BOTÃO LOGIN */}
+        {/* Botão de Login */}
         <button
-          onClick={handleLogin}
+          onClick={login}
           style={{
             width: "100%",
             padding: "14px",
             borderRadius: "999px",
-            background: "linear-gradient(135deg, #f4c86c, #d9a84f)",
+            background:
+              "linear-gradient(135deg, #ffdd55, #ffbb00, #ffcc33, #ffe680)",
+            border: "none",
             color: "#000",
-            fontWeight: "700",
-            fontSize: "1.05rem",
+            fontWeight: "bold",
+            fontSize: "1.1rem",
             cursor: "pointer",
-            boxShadow: "0 6px 20px rgba(244,200,108,0.25)",
-            transition: "0.25s",
+            marginTop: "5px",
+            boxShadow: "0 0 12px rgba(255,255,255,0.4)",
           }}
         >
           Entrar
         </button>
 
-        {/* LINK PARA CRIAR CONTA */}
+        {/* Link Criar Conta */}
         <p
+          onClick={() => router.push("/signup")}
           style={{
-            textAlign: "center",
-            marginTop: "14px",
-            color: "#f4c86c",
+            marginTop: "18px",
+            color: "#ffdd55",
             cursor: "pointer",
+            fontSize: "0.95rem",
           }}
-          onClick={() => (window.location.href = "/signup")}
         >
-          Criar conta
+          Criar uma conta
         </p>
       </div>
     </div>
