@@ -1,0 +1,74 @@
+:root {
+  --bg-main: #05060a;
+  --bg-card: #0c0d16;
+  --bg-soft: #101121;
+
+  --gold: #f4c86c;
+  --gold-soft: rgba(244, 200, 108, 0.18);
+
+  --white: #ffffff;
+  --text-soft: #c2c3d6;
+
+  --radius-lg: 18px;
+  --radius-xl: 26px;
+
+  --shadow-soft: 0 20px 44px rgba(0, 0, 0, 0.85);
+}
+
+/* Fonte */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, sans-serif;
+  background: var(--bg-main);
+  color: var(--white);
+}
+
+/* Cards padrão */
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  padding: 26px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* Títulos */
+h1, h2, h3 {
+  font-weight: 700;
+}
+
+/* Texto dourado estilo premium */
+.gold {
+  color: var(--gold);
+}
+
+/* Botão amarelo */
+.btn-primary {
+  display: inline-block;
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(90deg, #f4c86c, #f6d78c);
+  color: #000;
+  font-weight: 600;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+}
+
+/* Botão transparente */
+.btn-outline {
+  padding: 14px 18px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--gold);
+  background: transparent;
+  color: var(--gold);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Glow dourado */
+.glow {
+  box-shadow: 0 0 18px rgba(244, 200, 108, 0.5);
+}
