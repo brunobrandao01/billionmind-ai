@@ -1,1 +1,43 @@
-111111111111111111
+:root {
+  --gold: #f4c86c;
+  --gold-soft: #f4c86c40;
+  --text: #ffffff;
+  --text-soft: #a3a3a3;
+  --bg: #000000;
+  --panel: rgba(255, 255, 255, 0.06);
+  --radius: 1.5rem;
+}
+
+/* Fundo animado */
+.glow-bg {
+  background:
+    radial-gradient(circle at 30% 50%, #f4c86c 0%, transparent 50%),
+    radial-gradient(circle at 70% 80%, #f4c86c 0%, transparent 50%);
+  animation: glowPulse 12s ease-in-out infinite alternate;
+}
+
+/* Fade-in global */
+.fade-in {
+  animation: fadeIn 1s ease-out forwards;
+}
+
+@keyframes glowPulse {
+  0% {
+    opacity: 0.15;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.25;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+  }
+}
